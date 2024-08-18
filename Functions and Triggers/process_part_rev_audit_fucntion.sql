@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION process_part_rev_audit() RETURNS TRIGGER AS $part_rev
         -- making use of the special variable TG_OP to work out the operation.
         --
         IF (TG_OP = 'DELETE') THEN
-            INSERT INTO part_rev_audit SELECT 'D', OLD.part_num , OLD.part_revision_level, now(), OLD.change_desciption;
+            INSERT INTO part_rev_audit SELECT 'D', OLD.part_num , OLD.part_revision_level, now(), NULL;
 
         ELSIF (TG_OP = 'UPDATE') THEN
             INSERT INTO part_rev_audit SELECT 'U', OLD.part_num, OLD.part_revision_level, now(), NEW.change_desciption;
@@ -19,6 +19,6 @@ CREATE OR REPLACE FUNCTION process_part_rev_audit() RETURNS TRIGGER AS $part_rev
     END;
 $part_rev_audit$ LANGUAGE plpgsql;
 
-CREATE TRIGGER part_rev_audit
+CREATE OR REPLACE TRIGGER part_rev_audit
 AFTER INSERT OR UPDATE OR DELETE ON revision_db
     FOR EACH ROW EXECUTE FUNCTION process_part_rev_audit();
