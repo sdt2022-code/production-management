@@ -1,14 +1,19 @@
 CREATE OR REPLACE FUNCTION update_part_description() 
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.part_description := (SELECT p.part_description FROM parts_db p WHERE p.part_num = NEW.part_num);
+
+    SELECT p.part_description, p.part_revision 
+    INTO NEW.part_description, NEW.part_revision
+    FROM parts_db p
+    WHERE p.part_num = NEW.part_num;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-COMMENT ON FUNCTION update_part_description() IS 'This function pulls the part description from parts_db when a new part is added to an assembly.';
+COMMENT ON FUNCTION update_part_description() IS 'This function pulls the part description and revision from parts_db when a new part is added to an assembly.';
 
-CREATE TRIGGER set_part_description
+CREATE OR REPLACE TRIGGER set_part_description
 BEFORE INSERT OR UPDATE ON assembly_parts
 FOR EACH ROW
 EXECUTE FUNCTION update_part_description();
