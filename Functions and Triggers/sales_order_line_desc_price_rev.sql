@@ -4,7 +4,7 @@ RETURNS TRIGGER AS $$
 BEGIN
 
 IF NEW.part_num IS NOT NULL THEN
-    SELECT p.part_description , p.unit_price, p.revision
+    SELECT p.part_description , p.unit_sales_price, p.part_revision
     INTO NEW.unit_description, NEW.unit_price , NEW.revision
     FROM parts_db AS p
     WHERE p.part_num = NEW.part_num;
