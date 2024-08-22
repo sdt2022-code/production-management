@@ -9,7 +9,7 @@ IF (NEW.job_is_confirmed = TRUE) THEN
 	VALUES (NEW.part_num, CURRENT_TIMESTAMP, NEW.job_num);
 
  ELSEIF (NEW.assembly_num IS NOT NULL) THEN
-	INSERT INTO assembly_production_time_hist_db (part_num, start_date, job_num)
+	INSERT INTO assembly_production_time_hist_db (assembly_num, start_date, job_num)
 	VALUES (NEW.assembly_num,CURRENT_TIMESTAMP, NEW.job_num);
 
  ELSE 

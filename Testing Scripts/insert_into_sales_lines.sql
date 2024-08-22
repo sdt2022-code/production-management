@@ -5,7 +5,7 @@ INSERT INTO sales_orders_lines (
     quantity
   )
 VALUES (
-    14,
+    15,
     NULL,
     100576,
     1

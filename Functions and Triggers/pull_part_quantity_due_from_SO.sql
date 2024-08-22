@@ -12,13 +12,18 @@ DECLARE
 */
 
 BEGIN 
- IF EXISTS (SELECT 1 FROM sales_orders_db
-	WHERE sales_order_id = NEW.sales_order_id AND part_num IS NOT NULL) THEN
+
+	SELECT so.due_date INTO NEW.job_due_date 
+	FROM sales_orders_db as so
+	WHERE so.sales_order_id = NEW.sales_order_id;
+
+ IF EXISTS (SELECT 1 FROM sales_orders_lines
+	WHERE so_id = NEW.sales_order_id AND part_num IS NOT NULL) THEN
 	
-	SELECT s.part_num, s.due_date, s.quanity, s.part_description
- 	INTO NEW.part_num, NEW.job_due_date, NEW.order_quantity, NEW.part_description
-	FROM sales_orders_db AS s
-	WHERE s.sales_order_id = NEW.sales_order_id;
+	SELECT sl.part_num, sl.quantity, sl.part_description
+ 	INTO NEW.part_num, NEW.order_quantity, NEW.part_description
+	FROM sales_orders_lines AS sl
+	WHERE sl.so_id = NEW.sales_order_id;
 
 /*
 	SELECT so_part_num FROM sales_orders_db WHERE sales_order_id = NEW.sales_order_id;
@@ -32,10 +37,10 @@ BEGIN
 
  ELSE
 
-	SELECT s.assembly_num, s.due_date, s.quanity, s.part_description
- 	INTO NEW.assembly_num, NEW.job_due_date, NEW.order_quantity, NEW.part_description
-	FROM sales_orders_db AS s
-	WHERE s.sales_order_id = NEW.sales_order_id; 
+	SELECT sl.assembly_num, sl.quantity, sl.part_description
+ 	INTO NEW.assembly_num, NEW.order_quantity, NEW.part_description
+	FROM sales_orders_lines AS sl
+	WHERE sl.so_id = NEW.sales_order_id; 
 
 /*
 	SELECT so_assembly_num FROM sales_orders_db WHERE sales_order_id = NEW.sales_order_id;
@@ -56,7 +61,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION pull_part_quantity_due_from_SO() IS 'This function pulls the corresponding part_num , order_quantity, and due_date for a specific SO_num inserted in the new job creation.';
 
 CREATE OR REPLACE TRIGGER trigger_SO_info_to_Job
-AFTER INSERT ON jobs_db
+BEFORE INSERT OR UPDATE ON jobs_db
 FOR EACH ROW
 EXECUTE FUNCTION pull_part_quantity_due_from_SO();
 
