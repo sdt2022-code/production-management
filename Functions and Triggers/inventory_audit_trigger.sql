@@ -4,10 +4,12 @@ RETURNS TRIGGER AS $$
 BEGIN 
 	IF NEW.qty_in_stock > OLD.qty_in_stock THEN
 	
-	INSERT INTO inventory_audit (part_num, transaction_date, qty_added, qty_removed, part_action) VALUES (NEW.part_num, NOW(), NEW.qty_in_stock - OLD.qty_in_stock, NULL, NULL);
+	INSERT INTO inventory_audit (part_num, transaction_date, qty_added, qty_removed, part_action) 
+	VALUES (NEW.part_num, NOW(), NEW.qty_in_stock - OLD.qty_in_stock, NULL, NULL);
 	
 	ELSE
-	INSERT INTO inventory_audit(part_num, transaction_date, qty_added, qty_removed, part_action) VALUES (NEW.part_num, NOW(), OLD.qty_in_stock - NEW.qty_in_stock, NULL, NULL);
+	INSERT INTO inventory_audit(part_num, transaction_date, qty_added, qty_removed, part_action) 
+	VALUES (NEW.part_num, NOW(), NULL,OLD.qty_in_stock - NEW.qty_in_stock, NULL);
 
 END IF;
 RETURN NEW;
