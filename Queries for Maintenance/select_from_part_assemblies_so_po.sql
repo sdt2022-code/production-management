@@ -6,3 +6,6 @@ SELECT * FROM part_rev_audit
 
 SELECT * FROM purchase_orders_db
 SELECT * FROM sales_orders_db
+SELECT * FROM sales_orders_lines
+SELECT * FROM jobs_db
+SELECT * FROM inventory_parts_db
