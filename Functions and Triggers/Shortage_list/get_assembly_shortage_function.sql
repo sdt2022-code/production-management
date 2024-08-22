@@ -1,3 +1,4 @@
+--DROP FUNCTION  get_shortage_parts(specific_job_id INTEGER)
 CREATE OR REPLACE FUNCTION get_shortage_parts(specific_job_id INTEGER)
 RETURNS TABLE(
     job_id INTEGER, 
@@ -15,25 +16,25 @@ BEGIN
 
 CREATE TEMPORARY TABLE temp_assembly_stock AS
 SELECT 
-    j.job_num, 
+    $1, 
+    ap.assembly_num,
     ap.part_num, 
     ap.part_description, 
     ap.quantity,
     i.qty_in_stock, 
-    p.lead_time
+    prt.lead_time
 FROM 
     assembly_parts AS ap
 INNER JOIN 
     inventory_parts_db AS i ON ap.part_num = i.part_num
-INNER JOIN 
-    jobs_db AS j ON j.part_num = ap.part_num 
+--INNER JOIN 
+    --jobs_db AS j ON j.part_num = ap.part_num 
 INNER JOIN
-    parts_db AS p ON p.part_num = ap.part_num
+    parts_db AS prt ON prt.part_num = ap.part_num
 WHERE ap.assembly_num = (
-    SELECT j.part_num
+    SELECT j.assembly_num
     FROM jobs_db AS j
     WHERE j.job_num = specific_job_id);	
-
 
 -- Update Inventory
 
@@ -44,7 +45,7 @@ WHERE i.part_num = t.part_num;
 
 RETURN QUERY
 SELECT 
-    t.job_num, 
+    $1, 
     t.part_num, 
     t.part_description, 
     i.qty_in_stock, 
