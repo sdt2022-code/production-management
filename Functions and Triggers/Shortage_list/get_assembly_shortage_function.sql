@@ -15,7 +15,7 @@ BEGIN
 
 CREATE TEMPORARY TABLE temp_assembly_stock AS
 SELECT 
-    j.job_id, 
+    j.job_num, 
     ap.part_num, 
     ap.part_description, 
     ap.quantity,
@@ -32,7 +32,7 @@ INNER JOIN
 WHERE ap.assembly_num = (
     SELECT j.part_num
     FROM jobs_db AS j
-    WHERE j.job_id = specific_job_id);	
+    WHERE j.job_num = specific_job_id);	
 
 
 -- Update Inventory
@@ -44,7 +44,7 @@ WHERE i.part_num = t.part_num;
 
 RETURN QUERY
 SELECT 
-    t.job_id, 
+    t.job_num, 
     t.part_num, 
     t.part_description, 
     i.qty_in_stock, 

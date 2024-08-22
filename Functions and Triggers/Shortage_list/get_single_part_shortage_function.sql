@@ -13,11 +13,11 @@ BEGIN
 SELECT j.order_quantity + j.over_run_quantity 
 INTO specific_job_quantity 
 FROM jobs_db AS j 
-WHERE j.job_id = specific_job_id;
+WHERE j.job_num = specific_job_id;
 
 CREATE TEMPORARY TABLE temp_assembly_stock AS
 SELECT 
- j.job_id,
+ j.job_num,
  p.part_num,
  p.part_description,
  i.qty_in_stock,
@@ -27,7 +27,7 @@ SELECT
  INNER JOIN 
 	inventory_parts_db AS i on p.part_num = i.part_num
  WHERE
-	j.job_id = specific_job_id;
+	j.job_num = specific_job_id;
 
 -- Update Inventory 
 
@@ -36,11 +36,11 @@ SET qty_in_stock = i.qty_in_stock - specific_job_quantity
 WHERE i.part_num = (
     SELECT j.part_num
     FROM jobs_db AS j
-    WHERE j.job_id = specific_job_id);
+    WHERE j.job_num = specific_job_id);
 
 RETURN QUERY
 SELECT 
- t.job_id,
+ t.job_num,
  t.part_num,
  t.part_description,
  t.qty_in_stock,
