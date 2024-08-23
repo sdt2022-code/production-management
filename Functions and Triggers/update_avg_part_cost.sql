@@ -10,7 +10,7 @@ BEGIN
 
  UPDATE inventory_parts_db
  SET unit_cost = avg_part_cost 
- WHERE NEW.part_num = OLD.part_num;
+ WHERE part_num = NEW.part_num;
 
  END IF;
 RETURN NEW;
@@ -20,7 +20,7 @@ $$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION update_avg_part_cost() IS 'This function is a running average for part_costs when a new part is added to inventory. It take the quantity, unit_cost and updates the average cost of the corresponding part.';
 
-CREATE TRIGGER update_avg_part_cost_trigger
+CREATE OR REPLACE TRIGGER update_avg_part_cost_trigger
 AFTER UPDATE ON inventory_parts_db
 FOR EACH ROW
 EXECUTE FUNCTION update_avg_part_cost();
