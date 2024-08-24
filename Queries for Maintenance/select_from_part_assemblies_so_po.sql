@@ -14,5 +14,9 @@ SELECT * FROM inventory_audit
 SELECT * FROM parts_db
 SELECT * FROM assembly_production_time_hist_db
 
+SELECT * FROM customer_db
 SELECT * FROM finished_goods_db
 --SELECT add_to_inventory('14-2-56' , 25)
+
+SELECT * FROM invoices_db
+SELECT * FROM invoice_lines
