@@ -3,11 +3,12 @@ RETURNS VOID AS $$
 
 BEGIN 
 
-INSERT INTO invoice_lines(invoice_num, part_num, assembly_num)
+INSERT INTO invoice_lines(invoice_num, part_num, assembly_num, quantity)
 SELECT 
-    (SELECT invoice_num FROM invoices_db WHERE invoice_num = invoice_id),
+    $1,
     sol.part_num,
-    sol.assembly_num
+    sol.assembly_num,
+    sol.quantity
 FROM sales_orders_lines AS sol
 WHERE so_id = sales_order_id;
 
