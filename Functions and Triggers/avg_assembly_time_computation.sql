@@ -13,6 +13,7 @@ IF (NEW.start_date IS NOT NULL AND NEW.end_date IS NOT NULL) THEN
   WHERE assembly_num = NEW.assembly_num;
 
 END IF;
+RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 

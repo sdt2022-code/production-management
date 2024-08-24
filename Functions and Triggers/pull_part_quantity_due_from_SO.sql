@@ -20,7 +20,7 @@ BEGIN
  IF EXISTS (SELECT 1 FROM sales_orders_lines
 	WHERE so_id = NEW.sales_order_id AND part_num IS NOT NULL) THEN
 	
-	SELECT sl.part_num, sl.quantity, sl.part_description
+	SELECT sl.part_num, sl.quantity, sl.unit_description
  	INTO NEW.part_num, NEW.order_quantity, NEW.part_description
 	FROM sales_orders_lines AS sl
 	WHERE sl.so_id = NEW.sales_order_id;
@@ -37,7 +37,7 @@ BEGIN
 
  ELSE
 
-	SELECT sl.assembly_num, sl.quantity, sl.part_description
+	SELECT sl.assembly_num, sl.quantity, sl.unit_description
  	INTO NEW.assembly_num, NEW.order_quantity, NEW.part_description
 	FROM sales_orders_lines AS sl
 	WHERE sl.so_id = NEW.sales_order_id; 
