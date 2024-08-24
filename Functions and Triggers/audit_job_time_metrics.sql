@@ -16,16 +16,28 @@ IF (NEW.job_is_confirmed = TRUE) THEN
 	RAISE NOTICE 'Part number or assembly_num do not exist';
 
  END IF;
-END IF;
 
-IF (NEW.is_closed = TRUE) THEN
+
+ELSEIF (NEW.is_closed = TRUE) THEN
+
  IF (NEW.part_num IS NOT NULL) THEN 
-	INSERT INTO part_production_time_hist_db (end_date)
-	VALUES (CURRENT_TIMESTAMP);
+
+	UPDATE part_prodcution_time_hist_db
+	SET end_date = CURRENT_TIMESTAMP
+	WHERE part_num = NEW.part_num;
+
+
+	--INSERT INTO part_production_time_hist_db (end_date)
+	--VALUES (CURRENT_TIMESTAMP);
 
  ELSEIF (NEW.assembly_num IS NOT NULL) THEN
-	INSERT INTO assembly_production_time_hist_db (end_date)
-	VALUES (CURRENT_TIMESTAMP);
+
+ 	UPDATE assembly_production_time_hist_db
+	SET end_date = CURRENT_TIMESTAMP
+	WHERE assembly_num = NEW.assembly_num;
+
+	--INSERT INTO assembly_production_time_hist_db (end_date)
+	--VALUES (CURRENT_TIMESTAMP);
  ELSE
 	RAISE NOTICE 'Part number or assembly_num do not exist';
  END IF;
@@ -39,7 +51,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION audit_job_time_metrics() IS 'This function audits the time metrics of parts and assemblies when their corresponding job_is_confirmed = TRUE OR is_closed = TRUE and logs the time these actions were taken into part_production_time_hist_db and assembly_production_time_hist_db.';
 
 CREATE OR REPLACE TRIGGER audit_job_time_metrics_trigger
-AFTER INSERT OR UPDATE ON jobs_db
+BEFORE INSERT OR UPDATE ON jobs_db
 FOR EACH ROW 
 WHEN (NEW.job_is_confirmed = TRUE or NEW.is_closed = TRUE)
 EXECUTE FUNCTION audit_job_time_metrics();
