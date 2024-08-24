@@ -24,3 +24,19 @@ VALUES (
     100576, 
     'A001',
     1);
+
+
+INSERT INTO assembly_revision_db (
+    assembly_revision_lvl,
+    assembly_revision_created,
+    assembly_rev_description_change,
+    assembly_rev_approved,
+    assembly_num
+      )
+VALUES (
+    'A',
+    NOW(),
+    'Initial assembly for the rice cooker',
+    FALSE,
+    100576
+      );
