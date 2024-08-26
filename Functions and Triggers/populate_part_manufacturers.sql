@@ -15,8 +15,8 @@ BEGIN
  WHERE m.manufacturer_id = NEW.manufacturer_id;
 
 
- INSERT INTO part_manufacturers(part_num , manuf_1, manuf_1_part_no)
- VALUES (NEW.part_num, manuf_name , NEW.manufacturer_part_no) ;
+ INSERT INTO part_manufacturers(part_num , manuf_1, manuf_1_part_no, manuf_1_part_price)
+ VALUES (NEW.part_num, manuf_name , NEW.manufacturer_part_no, NEW.unit_cost) ;
 
  END IF;
 
