@@ -4,7 +4,7 @@ RETURNS TRIGGER AS $$
 BEGIN
 
 UPDATE invoices_db
-SET invoice_total = (
+SET total_amount = (
     SELECT SUM(line_total) 
     FROM invoice_lines
     WHERE invoice_num = COALESCE(NEW.invoice_num , OLD.invoice_num)

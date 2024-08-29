@@ -20,3 +20,6 @@ SELECT * FROM finished_goods_db
 
 SELECT * FROM invoices_db
 SELECT * FROM invoice_lines
+
+SELECT * FROM manufacturers_db
+SELECT * FROM part_manufacturers
