@@ -20,8 +20,8 @@ BEGIN
  IF EXISTS (SELECT 1 FROM sales_orders_lines
 	WHERE so_id = NEW.sales_order_id AND part_num IS NOT NULL) THEN
 	
-	SELECT sl.part_num, sl.quantity, sl.unit_description
- 	INTO NEW.job_part_num, NEW.order_quantity, NEW.job_unit_description
+	SELECT sl.part_num, sl.quantity, sl.unit_description, sl.line_total
+ 	INTO NEW.job_part_num, NEW.order_quantity, NEW.job_unit_description, NEW.job_payout
 	FROM sales_orders_lines AS sl
 	WHERE sl.so_id = NEW.sales_order_id;
 
@@ -37,8 +37,8 @@ BEGIN
 
  ELSE
 
-	SELECT sl.assembly_num, sl.quantity, sl.unit_description
- 	INTO NEW.job_assembly_num, NEW.order_quantity, NEW.job_unit_description
+	SELECT sl.assembly_num, sl.quantity, sl.unit_description, sl.line_total
+ 	INTO NEW.job_assembly_num, NEW.order_quantity, NEW.job_unit_description, NEW.job_payout
 	FROM sales_orders_lines AS sl
 	WHERE sl.so_id = NEW.sales_order_id; 
 
@@ -61,7 +61,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON FUNCTION pull_part_quantity_due_from_SO() IS 'This function pulls the corresponding part_num , order_quantity, and due_date for a specific SO_num inserted in the new job creation.';
 
 CREATE OR REPLACE TRIGGER trigger_SO_info_to_Job
-BEFORE INSERT OR UPDATE ON jobs_db
+BEFORE INSERT ON jobs_db
 FOR EACH ROW
 EXECUTE FUNCTION pull_part_quantity_due_from_SO();
 
