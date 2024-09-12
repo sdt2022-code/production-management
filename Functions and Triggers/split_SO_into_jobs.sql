@@ -27,4 +27,3 @@ COMMENT ON FUNCTION split_so_into_jobs(sales_order_num INTEGER) IS 'This functio
 	wishes to create a job for.';
 
 
-SELECT split_SO_into_jobs(15)
