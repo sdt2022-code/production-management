@@ -5,11 +5,11 @@ BEGIN
 	IF NEW.qty_in_stock > OLD.qty_in_stock THEN
 	
 	INSERT INTO inventory_audit (part_num, transaction_date, qty_added, qty_removed, part_action) 
-	VALUES (NEW.part_num, NOW(), NEW.qty_in_stock - OLD.qty_in_stock, NULL, NULL);
+	VALUES (NEW.part_num, CURRENT_TIMESTAMP, NEW.qty_in_stock - OLD.qty_in_stock, NULL, NULL);
 	
 	ELSE
 	INSERT INTO inventory_audit(part_num, transaction_date, qty_added, qty_removed, part_action) 
-	VALUES (NEW.part_num, NOW(), NULL,OLD.qty_in_stock - NEW.qty_in_stock, NULL);
+	VALUES (NEW.part_num, CURRENT_TIMESTAMP, NULL,OLD.qty_in_stock - NEW.qty_in_stock, NULL);
 
 END IF;
 RETURN NEW;
@@ -21,6 +21,7 @@ COMMENT ON FUNCTION audit_inventory() IS 'This function audits material in and m
 CREATE OR REPLACE TRIGGER inventory_audit_trigger
 AFTER UPDATE ON inventory_parts_db
 FOR EACH ROW 
+WHEN (OLD.qty_in_stock IS DISTINCT FROM NEW.qty_in_stock)
 EXECUTE FUNCTION audit_inventory();
 
 COMMENT ON TRIGGER inventory_audit_trigger ON inventory_parts_db IS 'This trigger fires when the inventory_parts_db is updated. Its goal is to monitor and audit material flow and store transactions in inventory_audit.';
