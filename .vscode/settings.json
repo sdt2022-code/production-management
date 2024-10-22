@@ -10,6 +10,16 @@
             "database": "test",
             "username": "postgres",
             "connectionTimeout": 30
+        },
+        {
+            "previewLimit": 50,
+            "server": "serpdbinstance.ctiw26q6q3s4.us-east-2.rds.amazonaws.com",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "database": "serptest",
+            "username": "sari",
+            "name": "SERP DB DEV"
         }
     ]
 }

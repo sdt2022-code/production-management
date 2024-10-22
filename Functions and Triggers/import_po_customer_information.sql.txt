@@ -1,0 +1,18 @@
+CREATE  FUNCTION import_po_customer_information()
+RETURNS TRIGGER AS $$
+
+begin
+
+SELECT c.address_street_1, c.address_street_2, c.address_city, c.address_state, c.address_city, c.customer_id
+INTO NEW.address_street_1, NEW.address_street_2, NEW.address_city, NEW.address_state, NEW.address_city, NEW.customer_id
+FROM customer_db AS c
+WHERE c.customer_name = NEW.customer_name;
+
+RETURN NEW;
+end;
+$$LANGUAGE plpgsql;
+
+CREATE TRIGGER import_po_customer_information_trigger
+AFTER INSERT ON purchase_orders_db
+FOR EACH ROW 
+EXECUTE FUNCTION import_po_customer_information();
