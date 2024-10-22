@@ -3,8 +3,8 @@ RETURNS TRIGGER AS $$
 
 BEGIN
 
-SELECT co.address_street_1, co.address_street_2, co.address_city, co.address_state, co.address_zip
-INTO NEW.address_street_1, NEW.address_street_2, NEW.address_city, NEW.address_state, NEW.address_zip
+SELECT co.customer_id, co.address_street_1, co.address_street_2, co.address_city, co.address_state, co.address_zip
+INTO NEW.customer_id, NEW.address_street_1, NEW.address_street_2, NEW.address_city, NEW.address_state, NEW.address_zip
 FROM customer_db AS co
 WHERE co.customer_name = NEW.customer_name;
 

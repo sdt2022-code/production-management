@@ -7,10 +7,10 @@ BEGIN
 	SET po_total = (
 	 SELECT COALESCE(SUM(line_total), 0)
 	 FROM purchase_order_lines 
-	 WHERE po_num = COALESCE(NEW.po_num , OLD.po_num)
+	 WHERE customer_po_num = COALESCE(NEW.po_num , OLD.po_num)
 	 )
 	
-	WHERE po_num = COALESCE(NEW.po_num, OLD.po_num);
+	WHERE customer_po_num = COALESCE(NEW.po_num, OLD.po_num);
 
 RETURN NEW;
 END;

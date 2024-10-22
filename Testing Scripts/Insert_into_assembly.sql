@@ -40,3 +40,32 @@ VALUES (
     FALSE,
     100576
       );
+
+
+INSERT INTO assemblies (
+    assembly_num,
+    assembly_description,
+    assembly_sales_price,
+    avg_time_to_complete,
+    assembly_revision,
+    assembly_search_words
+  )
+VALUES (
+    20011,
+    'Mechanical assembly required to construct a housing that will contain the PCB, including mechanical fasteners and connectors.',
+    150.000,
+    '7 days',
+    'B1',
+    ARRAY['housing', 'enclosure', 'mechanical']
+);
+
+
+  INSERT INTO assembly_parts (
+      assembly_num,
+      part_num,
+      quantity
+    )
+  VALUES (
+      10011,'P009',20
+
+    );
